@@ -6,57 +6,59 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #eaf2f8;
+      padding: 30px;
       text-align: center;
-      padding: 50px;
+      background-color: #f0f8ff;
     }
-    button {
+
+    #weatherBtn {
       padding: 10px 20px;
-      font-size: 18px;
+      font-size: 16px;
       background-color: #3498db;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
-    button:hover {
+
+    #weatherBtn:hover {
       background-color: #2980b9;
     }
+
     #weatherData {
-      margin-top: 30px;
-      font-size: 20px;
-      color: #2c3e50;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
     }
   </style>
 </head>
 <body>
 
   <h2>Weather App</h2>
-  <button onclick="getWeather()">Get Current Weather</button>
+  <button id="weatherBtn">Get Current Weather</button>
   <div id="weatherData"></div>
 
   <script>
-    async function getWeather() {
+    document.getElementById("weatherBtn").addEventListener("click", function () {
       const apiKey = "83d2b2939592bc0013bb9f38acbce539"; 
-      const city = "London";
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=London&appid=${apiKey}`;
 
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error("Failed to fetch weather data");
-        }
-
-        const data = await response.json();
-        const weatherDescription = data.weather[0].main;
-
-        document.getElementById("weatherData").textContent =
-          `Current weather in ${city}: ${weatherDescription}`;
-      } catch (error) {
-        document.getElementById("weatherData").textContent =
-          "Error: " + error.message;
-      }
-    }
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then(data => {
+          const weather = data.weather[0].main;
+          document.getElementById("weatherData").innerText = `Current weather in London: ${weather}`;
+        })
+        .catch(error => {
+          document.getElementById("weatherData").innerText = "Failed to load weather data.";
+          console.error("Fetch error:", error);
+        });
+    });
   </script>
 
 </body>
