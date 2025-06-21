@@ -1,27 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Weather App</title>
 </head>
 <body>
-  <h1>Weather App</h1>
+  <h2>Weather API Example</h2>
+
+  
   <button id="getWeatherBtn">Get Current Weather</button>
-  <div id="weatherData" style="margin-top: 10px; font-weight: bold;"></div>
+
+ 
+  <div id="weatherData" style="margin-top: 15px; font-weight: bold;"></div>
 
   <script>
-    document.getElementById('getWeatherBtn').addEventListener('click', getWeather);
+    document.getElementById("getWeatherBtn").addEventListener("click", getWeather);
 
     async function getWeather() {
       const apiKey = '83d2b2939592bc0013bb9f38acbce539'; 
-      const city = 'London'; 
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+      const city = 'London';
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
         const data = await response.json();
-        console.log(data); 
 
         if (response.ok && data.weather && data.weather.length > 0) {
           const condition = data.weather[0].main;
@@ -29,12 +37,12 @@
             `Current weather in ${city}: ${condition}`;
         } else {
           document.getElementById('weatherData').innerText =
-            `Error: ${data.message || 'Weather data not found.'}`;
+            'Weather data not found.';
         }
       } catch (error) {
-        console.error('Fetch error:', error);
+        console.error('Error fetching weather:', error);
         document.getElementById('weatherData').innerText =
-          'Error retrieving data.';
+          'Error fetching weather data.';
       }
     }
   </script>
