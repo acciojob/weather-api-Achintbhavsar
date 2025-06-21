@@ -8,25 +8,26 @@
 <body>
   <h1>Weather App</h1>
   <button onclick="getWeather()">Get Current Weather</button>
-  <div id="weatherData"></div>
+  <div id="weatherData" style="margin-top: 10px; font-weight: bold;"></div>
 
   <script>
     async function getWeather() {
       const apiKey = '83d2b2939592bc0013bb9f38acbce539'; 
       const city = 'London';
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
       try {
         const response = await fetch(url);
         const data = await response.json();
+        console.log(data); // 👀 See what data is returned
 
-        if (data.weather && data.weather.length > 0) {
+        if (response.ok && data.weather && data.weather.length > 0) {
           const condition = data.weather[0].main;
           document.getElementById('weatherData').innerText =
             `Current weather in ${city}: ${condition}`;
         } else {
           document.getElementById('weatherData').innerText =
-            'Weather data not found.';
+            `Error: ${data.message || 'Weather data not found.'}`;
         }
       } catch (error) {
         console.error('Error fetching weather data:', error);
