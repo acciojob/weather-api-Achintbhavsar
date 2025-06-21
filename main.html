@@ -7,19 +7,21 @@
 </head>
 <body>
   <h1>Weather App</h1>
-  <button onclick="getWeather()">Get Current Weather</button>
+  <button id="getWeatherBtn">Get Current Weather</button>
   <div id="weatherData" style="margin-top: 10px; font-weight: bold;"></div>
 
   <script>
+    document.getElementById('getWeatherBtn').addEventListener('click', getWeather);
+
     async function getWeather() {
       const apiKey = '83d2b2939592bc0013bb9f38acbce539'; 
-      const city = 'London';
+      const city = 'London'; 
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
       try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data); // 👀 See what data is returned
+        console.log(data); 
 
         if (response.ok && data.weather && data.weather.length > 0) {
           const condition = data.weather[0].main;
@@ -30,7 +32,7 @@
             `Error: ${data.message || 'Weather data not found.'}`;
         }
       } catch (error) {
-        console.error('Error fetching weather data:', error);
+        console.error('Fetch error:', error);
         document.getElementById('weatherData').innerText =
           'Error retrieving data.';
       }
